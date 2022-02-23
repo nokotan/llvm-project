@@ -188,22 +188,10 @@ bool WebAssemblyAsmTypeCheck::getTable(SMLoc ErrorLoc, const MCInst &Inst,
   if (getSymRef(ErrorLoc, Inst, SymRef))
     return true;
   auto WasmSym = cast<MCSymbolWasm>(&SymRef->getSymbol());
-  switch (WasmSym->getType().getValueOr(wasm::WASM_SYMBOL_TYPE_DATA)) {
-  case wasm::WASM_SYMBOL_TYPE_TABLE:
+  if (WasmSym->getType().getValueOr(wasm::WASM_SYMBOL_TYPE_DATA) ==
+      wasm::WASM_SYMBOL_TYPE_TABLE) {
     Type = static_cast<wasm::ValType>(WasmSym->getTableType().ElemType);
-    break;
-  case wasm::WASM_SYMBOL_TYPE_FUNCTION:
-  case wasm::WASM_SYMBOL_TYPE_DATA:
-    switch (SymRef->getKind()) {
-    case MCSymbolRefExpr::VK_GOT:
-    case MCSymbolRefExpr::VK_WASM_GOT_TLS:
-      Type = is64 ? wasm::ValType::I64 : wasm::ValType::I32;
-      return false;
-    default:
-      break;
-    }
-    LLVM_FALLTHROUGH;
-  default:
+  } else {
     return typeError(ErrorLoc, StringRef("symbol ") + WasmSym->getName() +
                                     " missing .tabletype");
   }
