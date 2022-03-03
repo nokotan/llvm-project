@@ -183,7 +183,7 @@ bool WebAssemblyAsmTypeCheck::getGlobal(SMLoc ErrorLoc, const MCInst &Inst,
 }
 
 bool WebAssemblyAsmTypeCheck::getTable(SMLoc ErrorLoc, const MCInst &Inst,
-                                        wasm::ValType &Type) {
+                                       wasm::ValType &Type) {
   const MCSymbolRefExpr *SymRef;
   if (getSymRef(ErrorLoc, Inst, SymRef))
     return true;
