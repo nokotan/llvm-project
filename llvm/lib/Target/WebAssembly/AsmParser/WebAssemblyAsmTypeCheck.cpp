@@ -252,6 +252,15 @@ bool WebAssemblyAsmTypeCheck::typeCheck(SMLoc ErrorLoc, const MCInst &Inst) {
       return true;
     if (popType(ErrorLoc, wasm::ValType::I32))
       return true;
+  } else if (Name == "table.fill") {
+    if (getTable(ErrorLoc, Inst, Type))
+      return true;
+    if (popType(ErrorLoc, wasm::ValType::I32))
+      return true;
+    if (popType(ErrorLoc, Type))
+      return true;
+    if (popType(ErrorLoc, wasm::ValType::I32))
+      return true;
   } else if (Name == "drop") {
     if (popType(ErrorLoc, {}))
       return true;
