@@ -1,6 +1,4 @@
-# RUN: llvm-mc -mattr=+reference-types -triple=wasm32-unknown-unknown -filetype=obj -o %t.o %s
-# RUN: wasm-ld --no-entry --export obtain_funcref_from_table_index %t.o -o %t.wasm
-# RUN: obj2yaml %t.wasm | FileCheck %s
+# RUN: llvm-mc -mattr=+reference-types -triple=wasm32-unknown-unknown -filetype=obj -o - < %s | obj2yaml | FileCheck %s
 
 .globl __indirect_function_table
 .tabletype __indirect_function_table, funcref
